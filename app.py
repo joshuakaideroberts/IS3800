@@ -36,8 +36,8 @@ def verify_password(username, password):
 
 @app.route('/')
 def index():
-    titleText = "Welcome"
-    bodyText = "Welcome to the IS3800 - Cybersecurity Reference Tool! For Demo Purposes (may want to delete): username = username; password = password."
+    titleText = "The Cybersecurity Reference Tool"
+    bodyText = "Welcome to the Cybersecurity Reference Tool! This is your one stop shop for looking up the basics of Cybersecurity! For Demo Purposes: username = username; password = password."
     bodyText += Markup("""
     <br>
      <a href=/sqlInjection>Basics of SQL Injection</a>
@@ -52,13 +52,14 @@ def index():
     <br>
      <a href=/xss>Basics of Cross Site Scripting</a>
     <br>
-     <a href=/passwords>Overview of Password Security: Hashes, Salts, and Password Cracking</a>
+     <a href=/passwords>Password Security: Hashes, Salts, and Password Cracking</a>
     <br>
      <a href=/phishing>Overview of Phishing</a>
     <br>
      <a href=/cybersec>The Future of Cybersecurity</a>
     <br>
     </br>""")
+    bodyText += Markup("By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen")
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/sqlInjection')
@@ -67,17 +68,61 @@ def sqlInjection():
     titleText = "SQL Injection"
     bodyText = Markup("""
     <h2>What is SQL Injection?</h2>
-    <p>SQL injection is a type of attack that allows users to execute arbitrary SQL code on a database by manipulating user input.</p>
-    <p>DO NOT DO THIS WITHOUT PERMISSION AS IT IS ILLEGAL. The three types of payloads we would like to discuss are:</p>
+    <p>SQL injection is a type of attack that allows users to execute arbitrary SQL code on a database by manipulating user input.
+        Attackers often use SQLi to bypass login security measures, retrieve sensitive data, and even adding malicious code to databases. They can even drop tables, destroying database integrity!</p>
+    <p>DO NOT DO THIS WITHOUT PERMISSION AS IT IS ILLEGAL. Three types of payloads we would like to discuss are:</p>
     <ul>
-        <li>Comment Payload</li>
+        <li>Comment Payload - </li>
             <div style="margin-left: 20px;">Example: admin' -- </div>
         <li>OR Payload</li>
             <div style="margin-left: 20px;">Example: admin' or '1' = '1</div>
         <li>Combined OR/Comment Payload - best used when there isn't a known username</li>
             <div style="margin-left: 20px;">Example: ' OR 1 = 1 --</div>
     </ul>
-    <p>A great way to mitigate SQLi attacks is to NEVER concatanate user input
+    <p>The purpose of a comment payload is to comment out the rest of a query, which is useful in injecting your own logic. Conversely, the OR payload is used to create a logical condition that always
+        turns true, which allows a hacker to bypass authentification. Finally, the combined payload is a mix of both methods.</p>
+    <p>SQLi is one of the most common attacks out there due to it's simplicty. A great way to mitigate SQLi attacks is to NEVER concatanate user input and to ALWAYS implement the principle of least privilege when setting up access controls. 
+        Prepared statements (which are pre-compiled SQL statement that can be used repeatedly with different parameters) are also a highly effective tool to mitigate SQLi attacks. It is highly recommended to use all of these techniques in conjunction.
+        SQL Views can also be used to mitigate these attacks.To learn how, visit the W3 Schools guide here: https://www.w3schools.com/sql/sql_view.asp </p>
+                      
+    <hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. SQL Injection can allow an attacker to delete entire tables. <br>
+        <input type="radio" name="q1" value="True">True
+        <input type="radio" name="q1" value="False">False</p>
+
+        <p>2. Concatenating user input in SQL queries is safe if the input is short. <br>
+        <input type="radio" name="q2" value="True">True
+        <input type="radio" name="q2" value="False">False</p>
+
+        <p>3. Using prepared statements helps prevent SQL Injection. <br>
+        <input type="radio" name="q3" value="True">True
+        <input type="radio" name="q3" value="False">False</p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+        const answers = {
+            q1: "True",
+            q2: "False",
+            q3: "True"
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
+        }
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+
     <br><a href=/>Back to home</a>
     """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
