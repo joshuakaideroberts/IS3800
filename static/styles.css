@@ -6,3 +6,104 @@
     color: #333;
     padding: 20px;
 } */
+
+/* Terminal-style theme */
+body {
+    background-color: #0f0f0f;
+    color: #96ee96;
+    background: url("/static/backgrounds/spaceman.jpeg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1c1c1c;
+    border: 2px solid #61a361;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #33ff33;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    text-shadow: 0 0 5px #33ff33;
+}
+
+.content {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+a {
+    color: #00ccff;
+    text-decoration: none;
+    display: inline-block;
+    margin: 8px 0;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ff00ff;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+div {
+    margin-bottom: 10px;
+}
+
+code {
+    background-color: #222;
+    padding: 3px 5px;
+    border-radius: 4px;
+    font-family: monospace;
+    color: #ffcc00;
+}
+
+button {
+    background-color: #33ff33;
+    color: #0f0f0f;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00cc00;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .content {
+        font-size: 1rem;
+    }
+}
+
+.cursor::after {
+    content: '|';
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%   { opacity: 1; }
+    50%  { opacity: 0; }
+    100% { opacity: 1; }
+}
