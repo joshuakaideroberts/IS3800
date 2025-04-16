@@ -9,7 +9,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 
 config=configparser.ConfigParser()
-configFile = 'IS3800/contacts.cfg'
+configFile = 'contacts.cfg'
 config.read(configFile)
 # database = config['database']
 # db=database['db']
