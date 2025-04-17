@@ -59,7 +59,7 @@ def index():
      <a href=/cybersec>The Future of Cybersecurity</a>
     <br>
     </br>""")
-    bodyText += Markup("By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen")
+    bodyText += Markup("By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen Jensen")
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/sqlInjection')
@@ -84,7 +84,21 @@ def sqlInjection():
     <p>SQLi is one of the most common attacks out there due to it's simplicty. A great way to mitigate SQLi attacks is to NEVER concatanate user input and to ALWAYS implement the principle of least privilege when setting up access controls. 
         Prepared statements (which are pre-compiled SQL statement that can be used repeatedly with different parameters) are also a highly effective tool to mitigate SQLi attacks. It is highly recommended to use all of these techniques in conjunction.
         SQL Views can also be used to mitigate these attacks.To learn how, visit the W3 Schools guide here: https://www.w3schools.com/sql/sql_view.asp </p>
-                      
+    
+    <hr>
+
+    <h2>SQL Injection Simulation</h2>
+    <p>This simulates a vulnerable login form where input isn't sanitized.</p>
+    <p>Try entering a username like: <code>' OR 1=1 --</code></p>
+
+    <form method="POST" action="/sqltest">
+        <label>Username:</label><br>
+        <input type="text" name="username"><br><br>
+        <label>Password:</label><br>
+        <input type="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+                 
     <hr>
     <h3>Test Your Knowledge</h3>
     <form id="quizForm">
@@ -125,6 +139,30 @@ def sqlInjection():
 
     <br><a href=/>Back to home</a>
     """)
+    return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
+@app.route('/sqltest', methods=['POST'])
+def sqltest():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Unsafe, simulated logic for teaching only
+    if username == "admin" and password == "password":
+        result = "Login successful!"
+    elif "' OR 1=1 --" in username:
+        result = "Login bypassed using SQL Injection!"
+    else:
+        result = "Login failed."
+
+    titleText = "SQL Injection Result"
+    bodyText = Markup(f"""
+    <h2>SQL Injection Result</h2>
+    <p><strong>Username:</strong> {username}</p>
+    <p><strong>Password:</strong> {password}</p>
+    <p><strong>Result:</strong> {result}</p>
+    <br><a href="/xss">Try Again</a><br>
+    """)
+
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/linuxBasics')
@@ -430,8 +468,21 @@ def xss():
 
     bodyText = Markup(f"""
     <h2>Cross-Site Scripting (XSS)</h2>
-    <p>XSS allows attackers to inject malicious scripts into web pages. These scripts can be used to steal cookies, redirect users, or deface sites.</p>
-    <p>Try submitting something like: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+    <p><strong>What is XSS?</strong> Cross-Site Scripting (XSS) is a vulnerability that allows attackers to inject malicious scripts into content from otherwise trusted websites. It is one of the most common web security issues.</p>
+    
+    <p><strong>Types of XSS Attacks:</strong></p>
+    <ul>
+        <li><strong>Stored XSS:</strong> The malicious script is permanently stored on the target server (e.g., in a database).</li>
+        <li><strong>Reflected XSS:</strong> The script is reflected off a web server, like in a URL or search result.</li>
+        <li><strong>DOM-based XSS:</strong> The vulnerability exists in the client-side script, modifying the DOM environment.</li>
+    </ul>
+
+    <p><strong>Why it matters:</strong> An attacker can hijack user sessions, steal cookies, log keystrokes, redirect users, and more.</p>
+
+    <hr>
+
+    <p>Try submitting a script to see how an XSS attack might work:</p>
+    <p>Example: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
 
     <form method="POST">
         <label for="comment">Try your input below:</label><br>
@@ -444,46 +495,53 @@ def xss():
 
     <hr>
 
-    <h2>SQL Injection Simulation</h2>
-    <p>This simulates a vulnerable login form where input isn't sanitized.</p>
-    <p>Try entering a username like: <code>' OR 1=1 --</code></p>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. What does an XSS attack typically do?<br>
+        <input type="radio" name="q1" value="A">Deletes files on the server<br>
+        <input type="radio" name="q1" value="B">Executes scripts in the victim's browser<br>
+        <input type="radio" name="q1" value="C">Changes user passwords<br></p>
 
-    <form method="POST" action="/sqltest">
-        <label>Username:</label><br>
-        <input type="text" name="username"><br><br>
-        <label>Password:</label><br>
-        <input type="password" name="password"><br><br>
-        <input type="submit" value="Login">
+        <p>2. Which of the following is an example of an XSS payload?<br>
+        <input type="radio" name="q2" value="A">&lt;b&gt;Bold Text&lt;/b&gt;<br>
+        <input type="radio" name="q2" value="B">&lt;script&gt;alert('XSS')&lt;/script&gt;<br>
+        <input type="radio" name="q2" value="C">http://example.com/home<br></p>
+
+        <p>3. What is a good way to prevent XSS?<br>
+        <input type="radio" name="q3" value="A">Use MD5 hashing<br>
+        <input type="radio" name="q3" value="B">Run input through JavaScript<br>
+        <input type="radio" name="q3" value="C">Sanitize and escape user input<br></p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
     </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
 
-    <br><a href=/>Back to home</a><br>
+    <script>
+    function checkQuiz() {{
+        const answers = {{
+            "q1": "B",
+            "q2": "B",
+            "q3": "C"
+        }};
+        let score = 0;
+        for (let q in answers) {{
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {{
+                score++;
+            }}
+        }}
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }}
+    </script>
+
+    <br><a href=/>Back to home</a>
     """)
 
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+   
 
-@app.route('/sqltest', methods=['POST'])
-def sqltest():
-    username = request.form.get('username')
-    password = request.form.get('password')
 
-    # Unsafe, simulated logic for teaching only
-    if username == "admin" and password == "password":
-        result = "Login successful!"
-    elif "' OR 1=1 --" in username:
-        result = "Login bypassed using SQL Injection!"
-    else:
-        result = "Login failed."
-
-    titleText = "SQL Injection Result"
-    bodyText = Markup(f"""
-    <h2>SQL Injection Result</h2>
-    <p><strong>Username:</strong> {username}</p>
-    <p><strong>Password:</strong> {password}</p>
-    <p><strong>Result:</strong> {result}</p>
-    <br><a href="/xss">Try Again</a><br>
-    """)
-
-    return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/passwords')
 def passwords():
