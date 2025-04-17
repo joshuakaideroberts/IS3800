@@ -447,56 +447,118 @@ def owasp():
     titleText = "OWASP Top 10 (2021)"
     bodyText = Markup("""
     <h2>OWASP Top 10 Security Vulnerabilities</h2>
-    <p>This is only a quick overview, please visit <a href="https://owasp.org/Top10/" target="_blank">OWASP Top 10</a> for better details and accuracy.</p>
+    <p>The OWASP Foundation identifies the most critical security risks to web applications. Here's a summary of each, with examples and prevention tips. For more details, visit the <a href="https://owasp.org/Top10/" target="_blank">official OWASP site</a>.</p>
 
     <ol>
         <li>
-            <strong>Broken Access Control:</strong> Users can act outside their intended permissions. Prevent this by enforcing least privilege, denying access by default, and monitoring for failures.
+            <strong>Broken Access Control:</strong><br>
+            Users act outside their permissions due to poor access restrictions.
+            <ul>
+                <li><em>Example:</em> <strong>CVE-2019-0211</strong> let attackers escalate to root via Apache.</li>
+                <li><strong>Prevent:</strong> Deny access by default, enforce least privilege, log failures, rate-limit API calls.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Cryptographic Failures:</strong> Sensitive data is exposed due to weak or missing encryption. Always use strong algorithms, encrypt data in transit and at rest, and securely store passwords.
+            <strong>Cryptographic Failures:</strong><br>
+            Sensitive data exposed due to weak or missing encryption.
+            <ul>
+                <li>Use strong, up-to-date algorithms like AES, TLS 1.2+.</li>
+                <li>Store passwords with bcrypt, Argon2, or scrypt.</li>
+                <li>Encrypt all data in transit and at rest.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Injection:</strong> Untrusted input can be executed as code (e.g., SQL injection). Use parameterized queries, validate inputs, and avoid dynamic queries.
+            <strong>Injection:</strong><br>
+            Untrusted data triggers unintended code execution (e.g., SQL injection).
+            <ul>
+                <li>Use parameterized queries or ORM frameworks.</li>
+                <li>Validate inputs on server-side, escape dangerous characters.</li>
+                <li>Limit results returned in queries (e.g., using <code>LIMIT</code>).</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Insecure Design:</strong> Applications lack proper security architecture. Incorporate threat modeling and secure design principles from the start.
+            <strong>Insecure Design:</strong><br>
+            Missing or flawed security architecture leaves the system exposed.
+            <ul>
+                <li>Use secure design patterns and threat modeling early in development.</li>
+                <li>Establish a secure development lifecycle (SDLC).</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Security Misconfiguration:</strong> Default settings, unnecessary features, and exposed error messages open the door to attacks. Harden your environments and review configurations regularly.
+            <strong>Security Misconfiguration:</strong><br>
+            Default credentials, overly verbose errors, or unused features.
+            <ul>
+                <li><em>Example:</em> Nissan left a Git server open with username: <code>admin</code>, password: <code>admin</code>.</li>
+                <li>Harden environments, automate configuration reviews, and remove unused services.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Vulnerable & Outdated Components:</strong> Using old or untrusted software components introduces risk. Maintain an inventory and update dependencies often.
+            <strong>Vulnerable and Outdated Components:</strong><br>
+            Old or unpatched libraries lead to exploits.
+            <ul>
+                <li>Track versions of all components (client & server).</li>
+                <li>Use tools like OWASP Dependency Check, retire.js.</li>
+                <li>Subscribe to CVE alerts and patch regularly.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Identification & Authentication Failures:</strong> Weak login and session controls allow unauthorized access. Enforce MFA, use secure password storage, and expire sessions properly.
+            <strong>Identification and Authentication Failures:</strong><br>
+            Weak login systems enable account compromise.
+            <ul>
+                <li>Enforce MFA, use strong password storage, limit session reuse.</li>
+                <li>Invalidate sessions after logout or inactivity.</li>
+                <li>Avoid default or weak passwords.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Software & Data Integrity Failures:</strong> Trusting code or data without validation can lead to compromise. Use signed updates, secure CI/CD, and verify dependencies.
+            <strong>Software and Data Integrity Failures:</strong><br>
+            Trusting code or data without verification (e.g., unsigned updates).
+            <ul>
+                <li>Use digital signatures on updates and packages.</li>
+                <li>Secure the CI/CD pipeline and use trusted package sources.</li>
+                <li>Prevent insecure deserialization by verifying object integrity.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Security Logging & Monitoring Failures:</strong> Without logging and alerting, attacks can go undetected. Log key events and establish incident response processes.
+            <strong>Security Logging and Monitoring Failures:</strong><br>
+            Without logs and alerts, attacks can go undetected.
+            <ul>
+                <li>Log access failures, suspicious activity, and high-value transactions.</li>
+                <li>Monitor logs centrally and trigger alerts.</li>
+            </ul>
         </li><br>
+
         <li>
-            <strong>Server-Side Request Forgery (SSRF):</strong> Attackers force servers to make internal requests. Sanitize user input and isolate internal resources.
+            <strong>Server-Side Request Forgery (SSRF):</strong><br>
+            Attacker tricks the server into making unintended requests.
+            <ul>
+                <li>Validate and sanitize user-supplied URLs.</li>
+                <li>Enforce allowlists and block internal network access.</li>
+                <li>Disable redirects and strip raw responses.</li>
+            </ul>
         </li>
     </ol>
-                      
+
     <hr>
     <h3>Test Your Knowledge</h3>
     <form id="quizForm">
+        <p>1. Which of the following is a real example of Broken Access Control?<br>
+        <input type="radio" name="q1" value="A">CVE-2019-0211 Apache escalation<br>
+        <input type="radio" name="q1" value="B">Use of TLS 1.3<br>
+        <input type="radio" name="q1" value="C">Multi-factor authentication<br></p>
 
-        <p>1. What does 'Broken Access Control' allow an attacker to do?<br>
-        <input type="radio" name="q1" value="A">Access restricted resources<br>
-        <input type="radio" name="q1" value="B">Encrypt passwords<br>
-        <input type="radio" name="q1" value="C">Improve application speed<br>
-        </p>
-
-        <p>2. Which of the following is an example of Security Misconfiguration?<br>
-        <input type="radio" name="q2" value="A">Using a secure password<br>
-        <input type="radio" name="q2" value="B">Leaving default admin credentials enabled<br>
-        <input type="radio" name="q2" value="C">Logging out after each session<br>
-        </p>
+        <p>2. What’s a common prevention strategy for Injection attacks?<br>
+        <input type="radio" name="q2" value="A">Use bcrypt<br>
+        <input type="radio" name="q2" value="B">Parameterize queries<br>
+        <input type="radio" name="q2" value="C">Use raw SQL strings<br></p>
 
         <button type="button" onclick="checkQuiz()">Submit Answers</button>
     </form>
@@ -504,26 +566,26 @@ def owasp():
 
     <script>
     function checkQuiz() {
-    const answers = {
-        q1: "A",
-        q2: "B"
-    };
-    let score = 0;
-    for (let q in answers) {
-        const selected = document.querySelector('input[name="' + q + '"]:checked');
-        if (selected && selected.value === answers[q]) {
-            score++;
+        const answers = {
+            q1: "A",
+            q2: "B"
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
         }
-    }
-    const total = Object.keys(answers).length;
-    document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
     }
     </script>
-
 
     <br><a href="/">Back to home</a>
     """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
 
 @app.route('/xss', methods=['GET', 'POST'])
 def xss():
