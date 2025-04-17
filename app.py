@@ -458,7 +458,7 @@ def owasp():
 
 @app.route('/xss', methods=['GET', 'POST'])
 def xss():
-    titleText = "XSS & SQL Injection Practice"
+    titleText = "XSS"
     output = ""
     user_input = ""
 
