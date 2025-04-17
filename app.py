@@ -430,15 +430,128 @@ def xss():
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/passwords')
-@auth.login_required #login required because this is more sensitive
 def passwords():
-    titleText = "About This App"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "Password Security & Cracking Techniques"
+    bodyText = Markup("""
+    <h2>Password Security & Cracking Techniques</h2>
+
+    <h3>1. The Importance of Password Security</h3>
+    <p>Passwords are often the first line of defense against unauthorized access. Weak or reused passwords can lead to devastating breaches. One major example is the <strong>Target breach in 2013</strong>, which exposed data from over 110 million customers.</p>
+    <ul>
+        <li>Attackers used a phishing attack to install a trojan on a third-party vendor's system (Fazio Mechanical).</li>
+        <li>Due to poor network segmentation, they moved into Target’s internal network and deployed <strong>BlackPOS</strong> malware on POS systems.</li>
+        <li>Credit card data was harvested and sent to external servers, eventually ending up in Russia.</li>
+    </ul>
+
+    <h3>2. Account Takeover (ATO)</h3>
+    <p><strong>Account Takeover</strong> attacks occur when hackers gain access to user accounts, often through leaked credentials or password-guessing techniques.</p>
+    <p>Common methods include:</p>
+    <ul>
+        <li><strong>Credential Stuffing</strong>: Using credentials from previous breaches to access other accounts.</li>
+        <li><strong>Brute Force Attacks</strong>: Attempting a large number of random or common passwords.</li>
+    </ul>
+
+    <h3>3. Password Cracking Tools</h3>
+    <p>Attackers use specialized tools to automate the process of password guessing and cracking. Here are a few:</p>
+
+    <ul>
+        <li><strong>John The Ripper</strong>
+            <ul>
+                <li>Install: <code>sudo snap install john-the-ripper</code></li>
+                <li>Create combined password file: <code>sudo unshadow /etc/passwd /etc/shadow > ./combined.pass</code></li>
+                <li>Run: <code>john-the-ripper ./combined.pass --show</code></li>
+            </ul>
+        </li>
+
+        <li><strong>Hashcat</strong>
+            <ul>
+                <li>Uses GPU for password cracking</li>
+                <li>Supports custom password lists or generates random ones</li>
+                <li>Example list: 
+                    <a href="https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt" target="_blank">Top 10M Passwords List</a>
+                </li>
+            </ul>
+        </li>
+
+        <li><strong>Hydra</strong>
+            <ul>
+                <li>Install: <code>sudo apt install hydra</code></li>
+                <li>Used for attacking login forms and services</li>
+                <li>Example options:
+                    <pre>
+-l : single username
+-L : list of usernames
+-P : list of passwords
+-s : specify port
+http-post-form: "/path:user=^USER^&pass=^PASS^:F=failedMessage"
+                    </pre>
+                </li>
+            </ul>
+        </li>
+
+        <li>Other tools: <strong>Medusa</strong>, <strong>NCrack</strong></li>
+    </ul>
+
+    <h3>4. Prevention Techniques</h3>
+    <ul>
+        <li>Use <strong>Multi-Factor Authentication (MFA)</strong> to add an extra layer of security</li>
+        <li>Set <strong>rate limits</strong> to block automated login attempts</li>
+        <li>Implement <strong>device/browser detection</strong> to monitor suspicious logins</li>
+        <li>Check password safety via <a href="https://haveibeenpwned.com/Passwords" target="_blank">Have I Been Pwned</a></li>
+    </ul>
+
+    <h3>5. Best Practices for Passwords</h3>
+    <ul>
+        <li>Use long, random, and unique passwords for every account</li>
+        <li>Avoid reusing passwords across different services</li>
+        <li>Use a password manager to generate and store secure credentials</li>
+    </ul>
+
+<hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. What is Credential Stuffing?<br>
+        <input type="radio" name="q1" value="A">Trying every possible password combination.<br>
+        <input type="radio" name="q1" value="B">Using leaked username/password pairs from past breaches.<br>
+        <input type="radio" name="q1" value="C">Forcing password resets on all user accounts.<br></p>
+
+        <p>2. What does the tool 'John the Ripper' do?<br>
+        <input type="radio" name="q2" value="A">Secures login pages from brute force attacks.<br>
+        <input type="radio" name="q2" value="B">Hashes passwords using SHA-256.<br>
+        <input type="radio" name="q2" value="C">Cracks hashed passwords using a command-line interface.<br></p>
+
+        <p>3. What is one way to prevent Account Takeover (ATO)?<br>
+        <input type="radio" name="q3" value="A">Reuse the same password across all accounts.<br>
+        <input type="radio" name="q3" value="B">Disable password expiration policies.<br>
+        <input type="radio" name="q3" value="C">Use multi-factor authentication (MFA).<br></p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+        const answers = {
+            q1: "B",
+            q2: "C",
+            q3: "C"
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
+        }
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+
+    <br><a href=/>Back to home</a><br>
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
 
 @app.route('/phishing')
 def phishing():
