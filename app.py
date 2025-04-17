@@ -6,6 +6,7 @@ from markupsafe import Markup
 import configparser
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import jsonify
 
 config=configparser.ConfigParser()
 configFile = 'contacts.cfg'
@@ -51,10 +52,20 @@ def index():
     <br>
      <a href=/cybersec>The Future of Cybersecurity</a>
     <br>
+    <h3 style="color: #96ee96;">Bonus:</h3>
+    <a href="/keylogger">Simulate a Keylogger</a>
+    <br>
+    <a href="/logged">View Logged Keystrokes</a>
+    <hr style="border: 1px solid #61a361; margin: 20px 0;">
+
     </div>
     </br>""")
-    bodyText += Markup("By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen Jensen")
-    bodyText += Markup("For Demo Purposes: username = username; password = password")
+    bodyText += Markup("""
+    <div style="text-align: center;">
+    By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen Jensen
+    <br>
+    For Demo Purposes: username = username; password = password
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/sqlInjection')
@@ -155,43 +166,106 @@ def sqltest():
     <p><strong>Username:</strong> {username}</p>
     <p><strong>Password:</strong> {password}</p>
     <p><strong>Result:</strong> {result}</p>
-    <br><a href="/xss">Try Again</a><br>
+    <br><a href="/sqlInjection">Try Again</a><br>
     """)
 
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/linuxBasics')
 def linuxBasics():
-    titleText = "Introduction to Linux Commands"
+    titleText = "Intro to Linux Commands"
     bodyText = Markup("""
-    <h2>Introduction to Linux Commands</h2>
-    <table class="linux-table">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Commands</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>Navigation</td><td><ul><li>ls</li><li>cd</li><li>pwd</li><li>cwd</li><li>top</li><li>htop</li><li>ps</li><li>kill</li></ul></td></tr>
-            <tr><td>Connections</td><td><ul><li>ssh</li><li>scp</li><li>sftp</li><li>ftp</li><li>telnet</li></ul></td></tr>
-            <tr><td>Files</td><td><ul><li>rm</li><li>mv</li><li>cp</li><li>rmdir</li></ul></td></tr>
-            <tr><td>Text Processing</td><td><ul><li>grep</li><li>less</li><li>more</li><li>vi</li><li>nano</li><li>gedit</li><li>sed</li><li>awk</li><li>diff</li><li>comm</li><li>sort</li><li>uniq</li><li>tail</li><li>head</li></ul></td></tr>
-            <tr><td>Devices</td><td><ul><li>mount/umount</li><li>lsusb</li></ul></td></tr>
-            <tr><td>Package Managers</td><td><ul><li>yum</li><li>dnf</li><li>apt</li><li>rpm</li><li>snap</li></ul></td></tr>
-            <tr><td>Useful Directories</td><td><ul><li>/var</li><li>/var/log</li><li>/tmp</li><li>/home</li><li>/proc</li><li>/bin</li><li>/sbin</li><li>/etc</li></ul></td></tr>
-            <tr><td>System Info</td><td><ul><li>lsb_release</li><li>uname</li><li>cat /etc/redhat-release</li><li>iptables</li><li>runlevel</li><li>systemctl</li><li>hostname</li></ul></td></tr>
-            <tr><td>Misc Utilities</td><td><ul><li>screen</li><li>nohup</li><li>date</li><li>cal</li><li>df</li><li>du</li><li>wget</li><li>curl</li><li>journalctl</li><li>dmesg</li></ul></td></tr>
-            <tr><td>I/O Redirection</td><td><ul><li>&gt;</li><li>&gt;&gt;</li><li>&lt;</li><li>&lt;&lt;</li></ul></td></tr>
-            <tr><td>Operators</td><td><ul><li>&&</li><li>||</li><li>;</li></ul></td></tr>
-            <tr><td>Networking</td><td><ul><li>ifconfig</li><li>ip</li><li>route</li><li>iwconfig</li><li>tcpdump</li><li>nmap</li><li>ss</li><li>netstat</li></ul></td></tr>
-            <tr><td>Shell Variables</td><td><ul><li>$$</li><li>$?</li></ul></td></tr>
-            <tr><td>Archives</td><td><ul><li>tar</li><li>gzip</li><li>gunzip</li><li>zip</li><li>unzip</li><li>bunzip2</li></ul></td></tr>
-            <tr><td>Privilege Escalation</td><td><ul><li>sudo</li><li>su</li></ul></td></tr>
-            <tr><td>Bash Tips</td><td><ul><li>Use your arrows</li><li>CTRL-A</li><li>CTRL-E</li><li>history | grep foo</li></ul></td></tr>
-        </tbody>
-    </table>
-                      
+
+<h2>Basic Linux Commands</h2>
+<hr>
+<h3>Navigation & File Management</h3>
+<ul>
+    <li><code>ls</code>: List contents of a directory
+        <ul><li>-a: show all files</li><li>-l: long format</li><li>-h: human readable</li></ul>
+    </li>
+    <li><code>cd</code>: Change directory (<code>cd /</code>, <code>cd ..</code>, <code>cd ~</code>)</li>
+    <li><code>pwd</code>: Print current working directory</li>
+    <li><code>df -h</code>: Show disk space usage</li>
+    <li><code>du -sh *</code>: Show space used by each item in current dir</li>
+</ul>
+
+<h3>Processes & System Monitoring</h3>
+<ul>
+    <li><code>ps -ef</code>: Show all running processes</li>
+    <li><code>ps -ef | grep bash</code>: Find specific processes</li>
+    <li><code>top</code> / <code>htop</code>: View real-time system usage</li>
+    <li><code>kill</code>: Terminate a process</li>
+</ul>
+
+<h3>Networking & Connectivity</h3>
+<ul>
+    <li><code>ssh</code>, <code>scp</code>, <code>sftp</code>, <code>ftp</code>, <code>telnet</code>: Remote access & file transfers</li>
+    <li><code>netstat -an</code>: Show active network connections</li>
+    <li><code>ifconfig</code>, <code>ip</code>, <code>route</code>: View and manage network settings</li>
+</ul>
+
+<h3>Text Processing Tools</h3>
+<ul>
+    <li><code>grep</code>: Search text (use <code>-i</code> for case-insensitive, <code>-v</code> to exclude)</li>
+    <li><code>cat</code>, <code>less</code>, <code>more</code>, <code>head</code>, <code>tail -f</code>: View file contents</li>
+    <li><code>sed</code>, <code>awk</code>, <code>diff</code>, <code>comm</code>, <code>sort</code>, <code>uniq</code>: Modify and compare text</li>
+</ul>
+
+<h3>Package Management</h3>
+<ul>
+    <li><code>apt update</code> / <code>apt upgrade</code>: Refresh and update packages</li>
+    <li><code>apt install &lt;package&gt;</code>: Install software</li>
+    <li>Other tools: <code>yum</code>, <code>dnf</code>, <code>rpm</code>, <code>snap</code></li>
+</ul>
+
+<h3>Useful System Tools</h3>
+<ul>
+    <li><code>lsb_release</code>, <code>uname</code>, <code>hostname</code>: System information</li>
+    <li><code>systemctl</code>, <code>iptables</code>: Manage services and firewall</li>
+    <li><code>screen</code>, <code>nohup</code>: Persistent terminal sessions</li>
+    <li><code>journalctl</code>, <code>dmesg</code>: System logs</li>
+</ul>
+
+<h3>Editors</h3>
+<ul>
+    <li><code>nano</code>: Simple, menu-driven editor</li>
+    <li><code>vi</code>: Advanced editor (ESC to command mode, <code>:wq</code> to save and quit)</li>
+</ul>
+
+<h3>I/O Redirection & Operators</h3>
+<ul>
+    <li><code>&gt;</code>, <code>&gt;&gt;</code>: Output redirection</li>
+    <li><code>&lt;</code>, <code>&lt;&lt;</code>: Input redirection</li>
+    <li><code>&&</code>, <code>||</code>, <code>;</code>: Command chaining and logic</li>
+</ul>
+
+<h3>Shell Variables & Bash Tips</h3>
+<ul>
+    <li><code>$$</code>: Current shell PID</li>
+    <li><code>$?</code>: Exit status of last command</li>
+    <li>Use <strong>arrow keys</strong> to scroll command history</li>
+    <li><code>CTRL-A</code>, <code>CTRL-E</code>: Move to beginning/end of line</li>
+    <li><code>history | grep &lt;command&gt;</code>: Find a command from history</li>
+</ul>
+
+<h3>Directories to Know</h3>
+<ul>
+    <li><code>/var</code>, <code>/var/log</code>: System logs and runtime files</li>
+    <li><code>/etc</code>: Configuration files</li>
+    <li><code>/home</code>, <code>/tmp</code>, <code>/proc</code>, <code>/bin</code>, <code>/sbin</code>: Core system paths</li>
+</ul>
+
+<h3>File Archiving & Compression</h3>
+<ul>
+    <li><code>tar</code>, <code>gzip</code>, <code>gunzip</code>, <code>zip</code>, <code>unzip</code>, <code>bunzip2</code>: Create and extract archives</li>
+</ul>
+
+<h3>Privilege Escalation</h3>
+<ul>
+    <li><code>sudo</code>: Run commands as another user (typically root)</li>
+    <li><code>su</code>: Switch to another user shell</li>
+</ul>
+
     <hr>
     <h3>Test Your Knowledge</h3>
     <form id="quizForm">
@@ -751,6 +825,81 @@ def cybersec():
     </br>""")
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
+logged_keys = []
+
+@app.route('/keylogger')
+def keylogger():
+    titleText = "Keylogger Simulation"
+
+    bodyText = Markup("""
+    <h2>Keylogger Demo (Client-Side)</h2>
+
+    <p><strong>What is a Keylogger?</strong></p>
+    <p>A <strong>keylogger</strong> (short for keystroke logger) is a type of surveillance tool that records the keys a user types on their keyboard, usually without their knowledge. Keyloggers can be used by attackers to steal sensitive information such as passwords, credit card numbers, or personal messages.</p>
+
+    <p>There are two main types of keyloggers:</p>
+    <ul>
+        <li><strong>Hardware keyloggers</strong> – physical devices plugged between a keyboard and a computer to capture input.</li>
+        <li><strong>Software keyloggers</strong> – programs that run silently in the background, recording keystrokes and possibly sending them to a remote attacker.</li>
+    </ul>
+
+    <p>This simulation demonstrates a simple, client-side keylogger written in JavaScript. It captures your keystrokes in the text box below and displays them as they're typed. It also sends them to the server (just for demo purposes, not stored permanently).</p>
+
+    <p><strong>How to Defend Against Keyloggers:</strong></p>
+    <ul>
+        <li>Use up-to-date antivirus and anti-malware tools</li>
+        <li>Avoid downloading untrusted software</li>
+        <li>Be cautious on public/shared computers</li>
+        <li>Use on-screen keyboards or password managers with auto-fill (they bypass keystroke logging)</li>
+        <li>Employ multi-factor authentication to minimize risk</li>
+    </ul>
+
+    <hr>
+
+    <label for="keyInput"><strong>Try typing something below:</strong></label><br>
+    <input type="text" id="keyInput" placeholder="Type something..." style="width: 100%; padding: 8px;"><br><br>
+    <div><strong>Keystrokes:</strong></div>
+    <pre id="keyDisplay" style="background:#222; padding:10px; color:#ffcc00; min-height:50px;"></pre>
+
+    <script>
+        const display = document.getElementById('keyDisplay');
+        const inputBox = document.getElementById('keyInput');
+        let logged = [];
+
+        inputBox.addEventListener('keydown', (e) => {
+            const key = e.key;
+            logged.push(key);
+            display.textContent = logged.join(' ');
+            fetch('/logkeys', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: key })
+            });
+        });
+    </script>
+
+    <br><a href="/logged">View Logged Keystrokes</a><br>
+    <br><a href="/">Back to Home</a>
+    """)
+    return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
+
+@app.route('/logkeys', methods=['POST'])
+def log_keys():
+    data = request.get_json()
+    if 'key' in data:
+        logged_keys.append(data['key'])
+    return jsonify({'status': 'ok'})
+
+@app.route('/logged')
+def show_logged():
+    titleText = "Logged Keystrokes"
+    bodyText = Markup(f"""
+    <h2>Logged Keystrokes</h2>
+    <pre>{' '.join(logged_keys)}</pre>
+    <br><a href="/">Back to Home</a>
+    """)
+    return render_template('template.html', titleText=titleText, bodyText=bodyText)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
 
