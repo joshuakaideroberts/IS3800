@@ -205,13 +205,65 @@ def linuxBasics():
 
 @app.route('/access')
 def access():
-    titleText = "The Current Time"
-    bodyText = "The time is " + str(datetime.now().time())
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "Access, Compartmentalization, & Privilege Separation"
+    bodyText = Markup("""
+    <h2>Access, Identification, & Privilege Separation</h2>
+    <p><strong>Identification</strong> is the act of claiming an identity, such as providing a username. But identification alone doesn't prove you are who you say you are.</p>
+    <p><strong>Authentication</strong> is the process of verifying that identity. This often involves something you know (password), something you have (MFA token), or something you are (fingerprint).</p>
+    <p>For example: typing your username is identification; entering your password and using MFA is authentication.</p>
+
+    <h3>Passwords and Hashing</h3>
+    <p>Passwords should never be stored in plain text. They are typically hashed using algorithms like SHA-1. To make these hashes more secure, we add a <strong>salt</strong>, which is a random string added before hashing. This ensures that even identical passwords result in different hashes.</p>
+    
+    <h3>Compartmentalization & Privilege Separation</h3>
+    <p><strong>Compartmentalization</strong> involves dividing systems and networks into isolated sections. If one area is compromised, the rest stays secure. For example, keeping HR systems separate from public web servers.</p>
+    <p><strong>Privilege Separation</strong> is the idea that users should only have the minimum access necessary to do their jobs. This is the principle of least privilege. It prevents unnecessary risk by limiting who can do what within a system.</p>
+    <p>These concepts help uphold the <strong>CIA Triad</strong>: Confidentiality, Integrity, and Availability.</p>
+
+    <p>Bonus tip: Don’t let users perform everyday tasks using an admin account. Always separate admin access from regular use!</p>
+
+    <hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. Authentication is the process of claiming who you are. <br>
+        <input type="radio" name="q1" value="True">True
+        <input type="radio" name="q1" value="False">False</p>
+
+        <p>2. The principle of least privilege helps protect sensitive data by limiting access. <br>
+        <input type="radio" name="q2" value="True">True
+        <input type="radio" name="q2" value="False">False</p>
+
+        <p>3. Two users with the same password will always have the same password hash. <br>
+        <input type="radio" name="q3" value="True">True
+        <input type="radio" name="q3" value="False">False</p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+        const answers = {
+            q1: "False",
+            q2: "True",
+            q3: "False"
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
+        }
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+
+    <br><a href=/>Back to home</a>
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
 
 @app.route('/networking')
 def networking():
