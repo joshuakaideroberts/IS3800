@@ -267,13 +267,73 @@ def access():
 
 @app.route('/networking')
 def networking():
-    titleText = "About This App"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "Introduction to Networking"
+    bodyText = Markup("""
+    <h2>What is Networking?</h2>
+    <p>Networking is the practice of connecting computers and other devices to share resources and information. It allows data to be exchanged over local or global distances.</p>
+
+    <h3>Basic Components</h3>
+    <ul>
+        <li><strong>Devices:</strong> Computers, servers, switches, routers, phones, etc.</li>
+        <li><strong>Connections:</strong> Wired (Ethernet) or wireless (Wi-Fi) links between devices.</li>
+        <li><strong>Protocols:</strong> Rules for communication. Examples: TCP/IP, HTTP, FTP.</li>
+    </ul>
+
+    <h3>Common Network Types</h3>
+    <ul>
+        <li><strong>LAN (Local Area Network):</strong> Covers a small geographic area like a home or office.</li>
+        <li><strong>WAN (Wide Area Network):</strong> Spans large areas—like the internet!</li>
+        <li><strong>WLAN:</strong> A wireless LAN (like your home Wi-Fi).</li>
+    </ul>
+
+    <h3>Why is Networking Important?</h3>
+    <p>Networking enables communication, collaboration, file sharing, and access to the internet. It supports businesses, education, entertainment, and daily life.</p>
+
+    <hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. What type of network typically spans a home or office?<br>
+        <input type="radio" name="q1" value="WAN">WAN<br>
+        <input type="radio" name="q1" value="LAN">LAN<br>
+        <input type="radio" name="q1" value="MAN">MAN</p>
+
+        <p>2. Which protocol is responsible for delivering web pages?<br>
+        <input type="radio" name="q2" value="FTP">FTP<br>
+        <input type="radio" name="q2" value="DNS">DNS<br>
+        <input type="radio" name="q2" value="HTTP">HTTP</p>
+
+        <p>3. What device directs traffic between networks?<br>
+        <input type="radio" name="q3" value="Router">Router<br>
+        <input type="radio" name="q3" value="Switch">Switch<br>
+        <input type="radio" name="q3" value="Modem">Modem</p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+        const answers = {
+            q1: "LAN",
+            q2: "HTTP",
+            q3: "Router"
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
+        }
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+
+    <br><a href=/>Back to home</a>
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
 
 @app.route('/owasp')
 def owasp():
