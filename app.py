@@ -337,12 +337,85 @@ def networking():
 
 @app.route('/owasp')
 def owasp():
-    titleText = "About This App"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "OWASP Top 10 (2021)"
+    bodyText = Markup("""
+    <h2>OWASP Top 10 Security Vulnerabilities</h2>
+    <p>This is only a quick overview, please visit <a href="https://owasp.org/Top10/" target="_blank">OWASP Top 10</a> for better details and accuracy.</p>
+
+    <ol>
+        <li>
+            <strong>Broken Access Control:</strong> Users can act outside their intended permissions. Prevent this by enforcing least privilege, denying access by default, and monitoring for failures.
+        </li><br>
+        <li>
+            <strong>Cryptographic Failures:</strong> Sensitive data is exposed due to weak or missing encryption. Always use strong algorithms, encrypt data in transit and at rest, and securely store passwords.
+        </li><br>
+        <li>
+            <strong>Injection:</strong> Untrusted input can be executed as code (e.g., SQL injection). Use parameterized queries, validate inputs, and avoid dynamic queries.
+        </li><br>
+        <li>
+            <strong>Insecure Design:</strong> Applications lack proper security architecture. Incorporate threat modeling and secure design principles from the start.
+        </li><br>
+        <li>
+            <strong>Security Misconfiguration:</strong> Default settings, unnecessary features, and exposed error messages open the door to attacks. Harden your environments and review configurations regularly.
+        </li><br>
+        <li>
+            <strong>Vulnerable & Outdated Components:</strong> Using old or untrusted software components introduces risk. Maintain an inventory and update dependencies often.
+        </li><br>
+        <li>
+            <strong>Identification & Authentication Failures:</strong> Weak login and session controls allow unauthorized access. Enforce MFA, use secure password storage, and expire sessions properly.
+        </li><br>
+        <li>
+            <strong>Software & Data Integrity Failures:</strong> Trusting code or data without validation can lead to compromise. Use signed updates, secure CI/CD, and verify dependencies.
+        </li><br>
+        <li>
+            <strong>Security Logging & Monitoring Failures:</strong> Without logging and alerting, attacks can go undetected. Log key events and establish incident response processes.
+        </li><br>
+        <li>
+            <strong>Server-Side Request Forgery (SSRF):</strong> Attackers force servers to make internal requests. Sanitize user input and isolate internal resources.
+        </li>
+    </ol>
+                      
+    <hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+
+        <p>1. What does 'Broken Access Control' allow an attacker to do?<br>
+        <input type="radio" name="q1" value="A">Access restricted resources<br>
+        <input type="radio" name="q1" value="B">Encrypt passwords<br>
+        <input type="radio" name="q1" value="C">Improve application speed<br>
+        </p>
+
+        <p>2. Which of the following is an example of Security Misconfiguration?<br>
+        <input type="radio" name="q2" value="A">Using a secure password<br>
+        <input type="radio" name="q2" value="B">Leaving default admin credentials enabled<br>
+        <input type="radio" name="q2" value="C">Logging out after each session<br>
+        </p>
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+    const answers = {
+        q1: "A",
+        q2: "B"
+    };
+    let score = 0;
+    for (let q in answers) {
+        const selected = document.querySelector('input[name="' + q + '"]:checked');
+        if (selected && selected.value === answers[q]) {
+            score++;
+        }
+    }
+    const total = Object.keys(answers).length;
+    document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+
+
+    <br><a href="/">Back to home</a>
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/xss')
