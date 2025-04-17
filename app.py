@@ -29,8 +29,9 @@ def verify_password(username, password):
 @app.route('/')
 def index():
     titleText = "The Cybersecurity Reference Tool"
-    bodyText = "Welcome to the Cybersecurity Reference Tool! This is your one stop shop for looking up the basics of Cybersecurity! For Demo Purposes: username = username; password = password."
+    bodyText = "Welcome to the Cybersecurity Reference Tool! This is your one stop shop for looking up the basics of Cybersecurity!"
     bodyText += Markup("""
+    <div style="text-align: center;">
     <br>
      <a href=/sqlInjection>Basics of SQL Injection</a>
     <br>
@@ -50,8 +51,10 @@ def index():
     <br>
      <a href=/cybersec>The Future of Cybersecurity</a>
     <br>
+    </div>
     </br>""")
     bodyText += Markup("By: Samuel Tanner, Joshua Roberts, Kylie Evans, and Owen Jensen")
+    bodyText += Markup("For Demo Purposes: username = username; password = password")
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/sqlInjection')
