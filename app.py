@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import random
 from datetime import datetime
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from markupsafe import Markup
 import configparser
 # import mysql.connector
@@ -418,15 +418,71 @@ def owasp():
     """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
-@app.route('/xss')
-@auth.login_required #login required because this is more sensitive
+@app.route('/xss', methods=['GET', 'POST'])
 def xss():
-    titleText = "About This App"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "XSS & SQL Injection Practice"
+    output = ""
+    user_input = ""
+
+    if request.method == 'POST':
+        user_input = request.form.get('comment')
+        output = f"<p><strong>You entered:</strong> {user_input}</p>"
+
+    bodyText = Markup(f"""
+    <h2>Cross-Site Scripting (XSS)</h2>
+    <p>XSS allows attackers to inject malicious scripts into web pages. These scripts can be used to steal cookies, redirect users, or deface sites.</p>
+    <p>Try submitting something like: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+
+    <form method="POST">
+        <label for="comment">Try your input below:</label><br>
+        <input type="text" name="comment" size="50"><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div style="margin-top: 15px;">
+        {output}
+    </div>
+
+    <hr>
+
+    <h2>SQL Injection Simulation</h2>
+    <p>This simulates a vulnerable login form where input isn't sanitized.</p>
+    <p>Try entering a username like: <code>' OR 1=1 --</code></p>
+
+    <form method="POST" action="/sqltest">
+        <label>Username:</label><br>
+        <input type="text" name="username"><br><br>
+        <label>Password:</label><br>
+        <input type="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+
+    <br><a href=/>Back to home</a><br>
+    """)
+
+    return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
+@app.route('/sqltest', methods=['POST'])
+def sqltest():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Unsafe, simulated logic for teaching only
+    if username == "admin" and password == "password":
+        result = "Login successful!"
+    elif "' OR 1=1 --" in username:
+        result = "Login bypassed using SQL Injection!"
+    else:
+        result = "Login failed."
+
+    titleText = "SQL Injection Result"
+    bodyText = Markup(f"""
+    <h2>SQL Injection Result</h2>
+    <p><strong>Username:</strong> {username}</p>
+    <p><strong>Password:</strong> {password}</p>
+    <p><strong>Result:</strong> {result}</p>
+    <br><a href="/xss">Try Again</a><br>
+    """)
+
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
 
 @app.route('/passwords')
