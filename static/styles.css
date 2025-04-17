@@ -107,3 +107,31 @@ button:hover {
     50%  { opacity: 0; }
     100% { opacity: 1; }
 }
+
+.linux-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.linux-table th,
+.linux-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.linux-table thead {
+    background-color: #3a518f;
+}
+
+.linux-table ul {
+    padding-left: 20px;
+    margin: 0;
+    list-style-type: disc;
+}
+
+.linux-table td ul li {
+    margin-bottom: 3px;
+}

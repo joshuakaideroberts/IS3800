@@ -42,7 +42,7 @@ def index():
     <br>
      <a href=/sqlInjection>Basics of SQL Injection</a>
     <br>
-     <a href=/linuxBasics>Intro to Linux</a>
+     <a href=/linuxBasics>Intro to Linux Commands</a>
     <br>
      <a href=/access>Access, Compartmentalization, and Privilege Seperation</a>
     <br>
@@ -129,13 +129,79 @@ def sqlInjection():
 
 @app.route('/linuxBasics')
 def linuxBasics():
-    titleText = "A Random Number"
-    bodyText = "Your random number is " + str(random.randint(0, 10000))
-    bodyText += Markup("""
-    <br>
-     <a href=/>Back to home</a>
-    </br>""")
+    titleText = "Introduction to Linux Commands"
+    bodyText = Markup("""
+    <h2>Introduction to Linux Commands</h2>
+    <table class="linux-table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Commands</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Navigation</td><td><ul><li>ls</li><li>cd</li><li>pwd</li><li>cwd</li><li>top</li><li>htop</li><li>ps</li><li>kill</li></ul></td></tr>
+            <tr><td>Connections</td><td><ul><li>ssh</li><li>scp</li><li>sftp</li><li>ftp</li><li>telnet</li></ul></td></tr>
+            <tr><td>Files</td><td><ul><li>rm</li><li>mv</li><li>cp</li><li>rmdir</li></ul></td></tr>
+            <tr><td>Text Processing</td><td><ul><li>grep</li><li>less</li><li>more</li><li>vi</li><li>nano</li><li>gedit</li><li>sed</li><li>awk</li><li>diff</li><li>comm</li><li>sort</li><li>uniq</li><li>tail</li><li>head</li></ul></td></tr>
+            <tr><td>Devices</td><td><ul><li>mount/umount</li><li>lsusb</li></ul></td></tr>
+            <tr><td>Package Managers</td><td><ul><li>yum</li><li>dnf</li><li>apt</li><li>rpm</li><li>snap</li></ul></td></tr>
+            <tr><td>Useful Directories</td><td><ul><li>/var</li><li>/var/log</li><li>/tmp</li><li>/home</li><li>/proc</li><li>/bin</li><li>/sbin</li><li>/etc</li></ul></td></tr>
+            <tr><td>System Info</td><td><ul><li>lsb_release</li><li>uname</li><li>cat /etc/redhat-release</li><li>iptables</li><li>runlevel</li><li>systemctl</li><li>hostname</li></ul></td></tr>
+            <tr><td>Misc Utilities</td><td><ul><li>screen</li><li>nohup</li><li>date</li><li>cal</li><li>df</li><li>du</li><li>wget</li><li>curl</li><li>journalctl</li><li>dmesg</li></ul></td></tr>
+            <tr><td>I/O Redirection</td><td><ul><li>&gt;</li><li>&gt;&gt;</li><li>&lt;</li><li>&lt;&lt;</li></ul></td></tr>
+            <tr><td>Operators</td><td><ul><li>&&</li><li>||</li><li>;</li></ul></td></tr>
+            <tr><td>Networking</td><td><ul><li>ifconfig</li><li>ip</li><li>route</li><li>iwconfig</li><li>tcpdump</li><li>nmap</li><li>ss</li><li>netstat</li></ul></td></tr>
+            <tr><td>Shell Variables</td><td><ul><li>$$</li><li>$?</li></ul></td></tr>
+            <tr><td>Archives</td><td><ul><li>tar</li><li>gzip</li><li>gunzip</li><li>zip</li><li>unzip</li><li>bunzip2</li></ul></td></tr>
+            <tr><td>Privilege Escalation</td><td><ul><li>sudo</li><li>su</li></ul></td></tr>
+            <tr><td>Bash Tips</td><td><ul><li>Use your arrows</li><li>CTRL-A</li><li>CTRL-E</li><li>history | grep foo</li></ul></td></tr>
+        </tbody>
+    </table>
+                      
+    <hr>
+    <h3>Test Your Knowledge</h3>
+    <form id="quizForm">
+        <p>1. Grep is one of the most useful tools you will use? <br>
+        <input type="radio" name="q1" value="True">True
+        <input type="radio" name="q1" value="False">False</p>
+
+        <p>2.  Netstat shows you what processes are listening? <br>
+        <input type="radio" name="q2" value="True">True
+        <input type="radio" name="q2" value="False">False</p>   
+
+        <p>3. If you hit the tab key twice it will not complete the name of files or commands? <br>
+        <input type="radio" name="q3" value="True">True
+        <input type="radio" name="q3" value="False">False</p>         
+                      
+
+        <button type="button" onclick="checkQuiz()">Submit Answers</button>
+    </form>
+    <div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+    <script>
+    function checkQuiz() {
+        const answers = {
+            q1: "True",
+            q2: "True",     
+            q3: "False"    
+        };
+        let score = 0;
+        for (let q in answers) {
+            const selected = document.querySelector('input[name="' + q + '"]:checked');
+            if (selected && selected.value === answers[q]) {
+                score++;
+            }
+        }
+        const total = Object.keys(answers).length;
+        document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+    }
+    </script>
+                                
+    <br><a href=/>Back to home</a>
+    """)
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
+
 
 @app.route('/access')
 def access():
