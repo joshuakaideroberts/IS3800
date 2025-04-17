@@ -4,20 +4,12 @@ from datetime import datetime
 from flask import Flask, render_template, request
 from markupsafe import Markup
 import configparser
-# import mysql.connector
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 
 config=configparser.ConfigParser()
 configFile = 'contacts.cfg'
 config.read(configFile)
-# database = config['database']
-# db=database['db']
-# dbHost=database['host']
-# dbUser=database['user']
-# dbPass=database['pass']
-
-# cnx=mysql.connector.connect(user=dbUser, password=dbPass, host=dbHost, database=db)
 
 app = Flask(__name__)
 
@@ -83,7 +75,7 @@ def sqlInjection():
         turns true, which allows a hacker to bypass authentification. Finally, the combined payload is a mix of both methods.</p>
     <p>SQLi is one of the most common attacks out there due to it's simplicty. A great way to mitigate SQLi attacks is to NEVER concatanate user input and to ALWAYS implement the principle of least privilege when setting up access controls. 
         Prepared statements (which are pre-compiled SQL statement that can be used repeatedly with different parameters) are also a highly effective tool to mitigate SQLi attacks. It is highly recommended to use all of these techniques in conjunction.
-        SQL Views can also be used to mitigate these attacks.To learn how, visit the W3 Schools guide here: https://www.w3schools.com/sql/sql_view.asp </p>
+        SQL Views can also be used to mitigate these attacks. To learn how, visit the W3 Schools guide here: https://www.w3schools.com/sql/sql_view.asp </p>
     
     <hr>
 
@@ -669,9 +661,67 @@ http-post-form: "/path:user=^USER^&pass=^PASS^:F=failedMessage"
 
 @app.route('/phishing')
 def phishing():
-    titleText = "About This App"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
+    titleText = "Phishing"
+    bodyText = Markup("""
+       <h2>What is Phishing</h2>
+    <p>Phishing is an attack often used by hackers to fool unsuspecting victim. Phishing attacks can come in many forms with the most typical ones being text messages or emails, and the attacker poses as a legitamate source (e.g., USPS, Amazon, Netflix, etc.).
+         These types of attacks often utilize malicious code that execute attacks like XSS. They also often link to forms that will have the user fill in sensitive information, and it can be very harmful. Furthemore, phishing scams are very cheap and extremely easy to edit and scale.
+        Common signs of phishing include (but are NOT limited to):</p>
+    <ul>
+        <li>Poor grammer/Obvious typos </li>
+        <li>Unexpected words</li>
+        <li>Generic greetings</li>
+        <li>Bloated email domain names</li>
+        <li>Requests for immediate action</li>
+    </ul>
+        <h2>Why is it effective</h2>
+    <p>You may be wondering why phishing is so effective when it is usally fairly obvious. They usually invoke a threat which often leads to a disregard for caution. It is hard to be completely rational when you have something potentially on the line.
+        As for numerous typos, those are often on purpose because it is tactic to weed out people who are more careful.</p>
+
+        <h2>Examples</h2>  
+            <p>Email</p>
+            <img src="/static/email_phishing_ex.png" style="width:50%;">
+            <p>Text Message</p>
+            <img src="/static/text_phishing_ex.png" style="width:50%;">
+    
+   <h3>Test Your Knowledge: Phishing Edition</h3>
+<form id="quizForm">
+    <p>1. Phishing emails often include urgent requests to act immediately. <br>
+    <input type="radio" name="q1" value="True">True
+    <input type="radio" name="q1" value="False">False</p>
+
+    <p>2. Clicking unknown links in emails is safe as long as the email looks official. <br>
+    <input type="radio" name="q2" value="True">True
+    <input type="radio" name="q2" value="False">False</p>
+
+    <p>3. Phishing attacks only occur over email and text messages. <br>
+    <input type="radio" name="q3" value="True">True
+    <input type="radio" name="q3" value="False">False</p>
+
+    <button type="button" onclick="checkQuiz()">Submit Answers</button>
+</form>
+
+<div id="quizResult" style="margin-top: 10px; font-weight: bold;"></div>
+
+<script>
+function checkQuiz() {
+    const answers = {
+        q1: "True",
+        q2: "False",
+        q3: "False"
+    };
+    let score = 0;
+    for (let q in answers) {
+        const selected = document.querySelector('input[name="' + q + '"]:checked');
+        if (selected && selected.value === answers[q]) {
+            score++;
+        }
+    }
+    const total = Object.keys(answers).length;
+    document.getElementById("quizResult").innerText = "You got " + score + " out of " + total + " correct.";
+}
+</script>            
+
     <br>
      <a href=/>Back to home</a>
     </br>""")
@@ -680,23 +730,23 @@ def phishing():
 @app.route('/cybersec') #we could mention career outlook, how to become a professional (certs and such), evolving techonology (e.g., quantum computing), etc.
 def cybersec():
     titleText = "What is the future of Cybersecurity?"
-    bodyText = "This app is a reference tool for IS3800 topics. More content to come!"
-    bodyText += Markup("""
+    bodyText = Markup("""
+        <h2>Evolving Threats</h2>
+    <p>Hopefully, you now understand the importance Cybersecurity in an ever-evolving cyber and data driven world. As technology and new threats contiinues to evolve, the need for skilled Cybersecurity profesionals will continue to expand. </p>
+    <p>Ultimately, the future is very unknowable. New technologies will be able to upend the modern world of cybersecurity, and new breakthroughs are already laying the groundwork. Generative AI, for instance, will continue to evolve
+        and is already capable of creating executable hacks that anyone can create. Quantum computing is another examplee - Google just recently came out with the "Majorna 1" chip back in February 2025 and it is a huge step in the field of Quantum Computing.
+        Already, there are theories that quantum computing will be able to almost instantly break modern encryption protocols.
+    </p>
+        <h2>How do you become a professional</h2>
+    <p>As the cyberworld continues to expand with technologies like the Internet of Things connecting nearly every part of our lives, the demand for cybersecurity professionals is growing faster than ever.
+         A strong starting point is to pursue formal education and earn industry-recognized certifications, such as CompTIA Security+, Cisco’s CCNA, and/or Certified Ethical Hacker (CEH), to name but a few.
+        While some believe cybersecurity is a field best entered later in your career, that isn't always the case. One effective way to break in early is by gaining practical experience through internships, bug bounties, or participating in cybersecurity competitions. 
+        These opportunities allow you to build real-world skills and showcase your abilities to potential employers.
+        Perhpas most importantly, make sure it is something you are passionate about. It can be a very stressful career, and it is essential that professionals stay up to date with current events.</p>
     <br>
      <a href=/>Back to home</a>
     </br>""")
     return render_template('template.html', titleText=titleText, bodyText=bodyText)
-
-# Commented-out contact related route:
-# @app.route('/contacts')
-# def contacts():
-#    cursor=cnx.cursor()
-#    ...
-
-# @app.route('/contactsDetail/<id>/')
-# @auth.login_required
-# def contactsDetail(id):
-#    ...
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
